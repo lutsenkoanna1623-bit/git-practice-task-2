@@ -1,6 +1,6 @@
-#ifndef PALINDROME_H
-#define PALINDROME_H
+#ifndef PALINDROME_H_
+#define PALINDROME_H_
 
 int is_palindrome(char str[]);
 
-#endif
+#endif  // PALINDROME_H_
