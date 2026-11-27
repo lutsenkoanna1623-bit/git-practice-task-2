@@ -1,3 +1,4 @@
+# Перевірка стилю C-коду за допомогою cpplint
 name: C Linter
 
 on:
