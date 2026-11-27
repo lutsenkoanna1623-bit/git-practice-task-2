@@ -1,14 +1,19 @@
 #include <stdio.h>
-#include "palindrome.h"
+#include "./palindrome.h"
+
+static void print_result(char str[]) {
+    printf("\"%s\" - %s\n", str,
+           is_palindrome(str) ? "паліндром" : "не паліндром");
+}
 
 int main() {
     char test1[] = "Level";
     char test2[] = "Hello";
     char test3[] = "";
 
-    printf("\"%s\" - %s\n", test1, is_palindrome(test1) ? "паліндром" : "не паліндром");
-    printf("\"%s\" - %s\n", test2, is_palindrome(test2) ? "паліндром" : "не паліндром");
-    printf("\"%s\" - %s\n", test3, is_palindrome(test3) ? "паліндром" : "не паліндром");
+    print_result(test1);
+    print_result(test2);
+    print_result(test3);
 
     return 0;
 }
