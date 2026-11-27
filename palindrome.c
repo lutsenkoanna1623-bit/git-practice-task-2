@@ -15,5 +15,5 @@ int is_palindrome(char str[]) {
         left++;
         right--;
     }
-    return 1;
+    return 0; // Навмисний баг для перевірки тестів
 }
