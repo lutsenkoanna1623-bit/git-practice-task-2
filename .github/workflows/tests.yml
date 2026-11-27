@@ -1,0 +1,17 @@
+name: Unit tests
+on:
+  pull_request:
+    paths:
+      - '**.c'
+      - '**.h'
+      - 'Makefile'
+      - '.github/workflows/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run unit tests
+        run: |
+          gcc -Wall -o test_runner palindrome.c test_palindrome.c
+          ./test_runner
