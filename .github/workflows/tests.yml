@@ -1,17 +1,54 @@
 name: Unit tests
+
+# Запускається на кожен PR у main.
+# Тести виконуються ТІЛЬКИ якщо PR змінює код (.c/.h або сам workflow).
+# Якщо змінено лише README чи інші не-кодові файли, job "unit-tests" пропускається
+# (статус "Skipped" GitHub зараховує як успіх), тож такий PR не блокується.
 on:
   pull_request:
-    paths:
-      - '**.c'
-      - '**.h'
-      - 'Makefile'
-      - '.github/workflows/**'
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unit-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  changes:
+    name: Detect code changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            code:
+              - '**/*.c'
+              - '**/*.h'
+              - '.github/workflows/**'
+
+  unit-tests:
+    name: unit-tests
+    needs: changes
+    # Пропускаємо тести лише тоді, коли ТОЧНО відомо, що код не змінювався.
+    # Якщо job "changes" впаде, тести все одно запустяться,
+    # інакше пропущений job зарахувався б як успіх і PR не заблокувався б.
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
       - name: Build and run unit tests
         run: |
-          gcc -Wall -o test_runner palindrome.c test_palindrome.c
+          gcc -std=c99 -Wall -Wextra -Werror -o test_runner test_palindrome.c palindrome.c
           ./test_runner
+
+      - name: Build main program
+        run: gcc -std=c99 -Wall -Wextra -Werror -o app main.c palindrome.c
