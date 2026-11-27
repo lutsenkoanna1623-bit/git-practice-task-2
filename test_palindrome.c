@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "palindrome.h"
+#include "./palindrome.h"
 
 void test_basic_palindromes() {
     char s1[] = "level";
