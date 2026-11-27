@@ -1,6 +1,6 @@
 #include <string.h>
 #include <ctype.h>
-#include "palindrome.h"
+#include "./palindrome.h"
 
 int is_palindrome(char str[]) {
     int left = 0;
@@ -9,7 +9,9 @@ int is_palindrome(char str[]) {
     if (right < 0) return 1;
 
     while (left < right) {
-        if (tolower((unsigned char)str[left]) != tolower((unsigned char)str[right])) {
+        int l = tolower((unsigned char)str[left]);
+        int r = tolower((unsigned char)str[right]);
+        if (l != r) {
             return 0;
         }
         left++;
